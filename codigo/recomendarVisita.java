@@ -30,12 +30,6 @@ public class recomendarVisita {
             		conexoes.add(palavras[i]);
             	}
             	conexoes.add("e");
-            	
-            	
-            	
-            	
-            	
-            	
             }
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + e.getMessage());
@@ -53,10 +47,8 @@ public class recomendarVisita {
         		cdDistancia = Integer.parseInt(cd[1].replace(")", ""));
         		atual.adicionarEstrada(new Estrada(atual, destino, cdDistancia));
         	  }
-   
         }
     	// Criando cidades  	
-       
         Cidade cidadeCabo = new Cidade("Cidade do Cabo", 1);
         Cidade cidadeJoanesburgo = new Cidade("Joanesburgo", 2);
         Cidade cidadeParis = new Cidade("Paris", 3);
@@ -89,14 +81,13 @@ public class recomendarVisita {
         cidadeCabo.adicionarEstrada(new Estrada(cidadeBerlim, cidadeAmsterda, 620));
         cidadeCabo.adicionarEstrada(new Estrada(cidadeAmsterda, cidadeLondres, 320));
 
-
         // Chamando o método para recomendar a visita
         List<Cidade> rotaRecomendada = recomendaVisita(cidadeCabo);
 
         // Exibindo a rota recomendada
         System.out.println("Rota Recomendada:");
         for (Cidade cidade : rotaRecomendada) {
-//            System.out.println(cidade.getNome() + " (ID: " + cidade.getId() + ")");
+            System.out.println(cidade.getNome() + " (ID: " + cidade.getId() + ")");
         }
     }
 
