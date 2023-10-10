@@ -25,12 +25,10 @@ public class RodoviariaInternacional {
         return estradas;
     }
 
-    // Método para obter uma recomendação de visitação em todas as cidades e todas as estradas (Requisito a)
-    public void recomendarVisitaTodasCidades() {
-        System.out.println("Recomendação de visitação em todas as cidades:");
-        for (Cidade cidade : cidades) {
-            System.out.println(cidade.getNome());
-        }
+    // Método para obter uma recomendação de visitação em todas as cidades (Requisito a)
+    public List<Cidade> recomendarVisitaTodasCidades() {
+        // Simplesmente retornar a lista de cidades
+        return cidades;
     }
 
     // Método para verificar se existe estrada de qualquer cidade para qualquer cidade (Requisito b)
@@ -94,35 +92,34 @@ public class RodoviariaInternacional {
     public static void main(String[] args) {
         RodoviariaInternacional rodoviaria = new RodoviariaInternacional();
 
-
         Cidade cidadeDoCabo = new Cidade("Cidade do Cabo", 0);
         Cidade joanesburgo = new Cidade("Joanesburgo", 1);
         Cidade nairobi = new Cidade("Nairobi", 2);
         Cidade paris = new Cidade("Paris", 3);
-       
 
         Estrada estrada1 = new Estrada(cidadeDoCabo, joanesburgo, 1270);
         Estrada estrada2 = new Estrada(cidadeDoCabo, nairobi, 3900);
         Estrada estrada3 = new Estrada(joanesburgo, nairobi, 4700);
-
+        Estrada estrada4 = new Estrada(paris, cidadeDoCabo, 9000);
 
         cidadeDoCabo.adicionarEstrada(estrada1);
         cidadeDoCabo.adicionarEstrada(estrada2);
         joanesburgo.adicionarEstrada(estrada1);
         joanesburgo.adicionarEstrada(estrada3);
-
+        nairobi.adicionarEstrada(estrada2);
+        nairobi.adicionarEstrada(estrada3);
+        paris.adicionarEstrada(estrada4);
 
         rodoviaria.adicionarCidade(cidadeDoCabo);
         rodoviaria.adicionarCidade(joanesburgo);
         rodoviaria.adicionarCidade(nairobi);
         rodoviaria.adicionarCidade(paris);
-    
 
         rodoviaria.adicionarEstrada(estrada1);
         rodoviaria.adicionarEstrada(estrada2);
         rodoviaria.adicionarEstrada(estrada3);
-
-
+        rodoviaria.adicionarEstrada(estrada4);
+        
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
