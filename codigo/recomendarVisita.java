@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -101,14 +100,15 @@ public class recomendarVisita {
         return rotaRecomendada;
     }
     private static Cidade encontraDestino(String NomeDestino) {
-    	int i;
-    	for (i = 0; i < Cidades.size(); i ++) {
-    		if (NomeDestino == Cidades.get(i).getNome()) {
-    			break;    			
-    		}
-    	}
-		return Cidades.get(i);
+        int i;
+        for (i = 0; i < Cidades.size(); i++) {
+            if (NomeDestino.equals(Cidades.get(i).getNome())) {
+                break;
+            }
+        }
+        return Cidades.get(i);
     }
+    
     private static void buscarTodasCidades(Cidade cidadeAtual, Set<Cidade> visitadas, List<Cidade> rota) {
         visitadas.add(cidadeAtual);
         rota.add(cidadeAtual);
