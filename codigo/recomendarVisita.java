@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,8 +14,7 @@ public class recomendarVisita {
     	String[] palavras, inicio, cd;
     	Cidade atual, destino;
     	List <String> conexoes = new ArrayList<>();
-    	
-    	
+    	    	
     	System.out.println("Repasse o caminho absoluto do arquivo: ");
     	String filename = sc.nextLine();
         try (Scanner fileScanner = new Scanner(new File(filename))) {
@@ -39,49 +39,15 @@ public class recomendarVisita {
         	  if ("e".equals(c)) {
         		  id ++;
         	  }else {
-        		// erro 
-        		cd = c.split(" (");	
-        		// erro
+        		cd = separaTexto(c);	
         		destino = encontraDestino(cd[0]);
-        		cdDistancia = Integer.parseInt(cd[1].replace(")", ""));
+        		cdDistancia = Integer.parseInt(cd[1]);
         		atual.adicionarEstrada(new Estrada(atual, destino, cdDistancia));
         	  }
         }
-    	// Criando cidades  	
-        Cidade cidadeCabo = new Cidade("Cidade do Cabo", 1);
-        Cidade cidadeJoanesburgo = new Cidade("Joanesburgo", 2);
-        Cidade cidadeParis = new Cidade("Paris", 3);
-        Cidade cidadeLondres = new Cidade("Londres", 4);
-        Cidade cidadeBerlim = new Cidade("Berlim", 5);
-        Cidade cidadeAmsterda = new Cidade("Amsterda", 6);
-        Cidade cidadeNairobi = new Cidade("Nairobi", 7);
-        Cidade cidadeMumbai = new Cidade("Mumbai", 8);
-        Cidade cidadeToquio = new Cidade("Toquio", 9);
-        Cidade cidadePequim = new Cidade("Pequim", 10);
-        Cidade cidadeBangcoc = new Cidade("Bangcoc", 11);
-
-        // Criando estradas
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeCabo, cidadeJoanesburgo, 1270));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeCabo, cidadeParis, 8900));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeCabo, cidadeLondres, 8900));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeCabo, cidadeNairobi, 3900));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeJoanesburgo, cidadeNairobi, 4700));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeJoanesburgo, cidadeBangcoc, 8800));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeJoanesburgo, cidadeMumbai, 6500));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeNairobi, cidadeMumbai, 4300));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeMumbai, cidadePequim, 3700));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeMumbai, cidadeToquio, 6800));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeMumbai, cidadeBangcoc, 4300));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeToquio, cidadePequim, 2400));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadePequim, cidadeBangcoc, 2700));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeParis, cidadeBerlim, 1050));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeParis, cidadeAmsterda, 430));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeParis, cidadeLondres, 340));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeBerlim, cidadeAmsterda, 620));
-        cidadeCabo.adicionarEstrada(new Estrada(cidadeAmsterda, cidadeLondres, 320));
-
+        
         // Chamando o método para recomendar a visita
-        List<Cidade> rotaRecomendada = recomendaVisita(cidadeCabo);
+        List<Cidade> rotaRecomendada = recomendaVisita(Cidades.get(0));
 
         // Exibindo a rota recomendada
         System.out.println("Rota Recomendada:");
@@ -100,15 +66,28 @@ public class recomendarVisita {
         return rotaRecomendada;
     }
     private static Cidade encontraDestino(String NomeDestino) {
-        int i;
-        for (i = 0; i < Cidades.size(); i++) {
-            if (NomeDestino.equals(Cidades.get(i).getNome())) {
-                break;
-            }
-        }
-        return Cidades.get(i);
+    	int i;
+    	for (i = 0; i < Cidades.size(); i ++) {
+    		String a = Cidades.get(i).getNome();
+    		if (NomeDestino.equals(Cidades.get(i).getNome())) {
+    			break;    			
+    		}
+    	}
+		return Cidades.get(i);
     }
-    
+
+	private static String[] separaTexto(String txt) {
+    	String[] tx= {"",""};
+    	for (int i = 0; i< txt.length(); i++) {
+    		if(txt.charAt(i) == '(') {
+    			tx[0] = txt.substring(0,i-1);
+    			tx[1] = txt.substring(i+1);
+    			tx[1] = tx[1].replace(")", "");
+    			break;
+    		}
+    	}
+    	return tx;
+    }
     private static void buscarTodasCidades(Cidade cidadeAtual, Set<Cidade> visitadas, List<Cidade> rota) {
         visitadas.add(cidadeAtual);
         rota.add(cidadeAtual);
