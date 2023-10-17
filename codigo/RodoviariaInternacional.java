@@ -28,6 +28,10 @@ public class RodoviariaInternacional {
     public List<Estrada> getEstradas() {
         return estradas;
     }
+    public void mostrarCidades(){
+        System.out.println("Lista de cidades:");
+        System.out.println(cidades);
+    }
 
     // Método para obter uma recomendação de visitação em todas as cidades (Requisito a)
     public List<Cidade> recomendarVisitaTodasCidades() {
@@ -139,6 +143,7 @@ public class RodoviariaInternacional {
 
             switch (opcao) {
                 case 1:
+                    rodoviaria.mostrarCidades();
                     rodoviaria.recomendarVisitaTodasCidades();
                     break;
                 case 2:

@@ -20,4 +20,5 @@ public class Estrada{
     public int getPeso() {
         return peso;
     }
+    
 }

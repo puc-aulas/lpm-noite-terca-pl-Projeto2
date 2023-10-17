@@ -27,4 +27,9 @@ public class Cidade {
     public List<Estrada> getEstradas() {
         return estradas;
     }
+    
+@Override
+    public String toString() {
+        return nome;
+    }
 }
