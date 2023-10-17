@@ -1,4 +1,8 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
 
 public class RodoviariaInternacional {
     private List<Cidade> cidades;
@@ -82,7 +86,7 @@ public class RodoviariaInternacional {
                 rota.add(cidadeMaisProxima);
                 visitadas.add(cidadeMaisProxima);
             } else {
-                break; 
+                break;
             }
         }
 
@@ -129,7 +133,7 @@ public class RodoviariaInternacional {
             System.out.println("3. Identificar Cidades Inacessíveis");
             System.out.println("4. Recomendar Rota para Passageiro");
             System.out.println("5. Sair");
-            System.out.print("Escolha uma opção: ");
+            System.out.println("Escolha uma opção: ");
 
             int opcao = scanner.nextInt();
 
@@ -155,7 +159,7 @@ public class RodoviariaInternacional {
                 case 3:
                     rodoviaria.cidadesInacessiveis();
                     break;
-                case 4: 
+                case 4:
                         System.out.print("Digite o ID da cidade de origem para o passageiro: ");
                     int idOrigemPassageiro = scanner.nextInt();
 
