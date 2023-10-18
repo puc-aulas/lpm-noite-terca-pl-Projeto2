@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -5,16 +7,16 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class RodoviariaInternacional {
-    private List<Cidade> cidades;
+    private static List<Cidade> Cidades;
     private List<Estrada> estradas;
-
+    
     public RodoviariaInternacional() {
-        cidades = new ArrayList<>();
+        Cidades = new ArrayList<>();
         estradas = new ArrayList<>();
     }
 
     public void adicionarCidade(Cidade cidade) {
-        cidades.add(cidade);
+        Cidades.add(cidade);
     }
 
     public void adicionarEstrada(Estrada estrada) {
@@ -22,21 +24,21 @@ public class RodoviariaInternacional {
     }
 
     public List<Cidade> getCidades() {
-        return cidades;
+        return Cidades;
     }
 
     public List<Estrada> getEstradas() {
         return estradas;
     }
     public void mostrarCidades(){
-        System.out.println("Lista de cidades:");
-        System.out.println(cidades);
+        System.out.println("Lista de Cidades:");
+        System.out.println(Cidades);
     }
 
-    // Método para obter uma recomendação de visitação em todas as cidades (Requisito a)
+    // Método para obter uma recomendação de visitação em todas as Cidades (Requisito a)
     public List<Cidade> recomendarVisitaTodasCidades() {
-        // Simplesmente retornar a lista de cidades
-        return cidades;
+        // Simplesmente retornar a lista de Cidades
+        return Cidades;
     }
 
     // Método para verificar se existe estrada de qualquer cidade para qualquer cidade (Requisito b)
@@ -49,12 +51,12 @@ public class RodoviariaInternacional {
         return false;
     }
 
-    // Método para identificar as cidades que não são acessíveis via transporte terrestre (Requisito c)
-    public void cidadesInacessiveis() {
+    // Método para identificar as Cidades que não são acessíveis via transporte terrestre (Requisito c)
+    public void CidadesInacessiveis() {
         System.out.println("Cidades inacessíveis via transporte terrestre:");
-        for (Cidade cidade : cidades) {
+        for (Cidade cidade : Cidades) {
             boolean acessivel = false;
-            for (Cidade outraCidade : cidades) {
+            for (Cidade outraCidade : Cidades) {
                 if (!cidade.equals(outraCidade) && existeEstradaEntreCidades(cidade, outraCidade)) {
                     acessivel = true;
                     break;
@@ -65,6 +67,30 @@ public class RodoviariaInternacional {
             }
         }
     }
+    
+    private static Cidade encontraDestino(String NomeDestino) {
+    	int i;
+    	for (i = 0; i < Cidades.size(); i ++) {
+    		String a = Cidades.get(i).getNome();
+    		if (NomeDestino.equals(Cidades.get(i).getNome())) {
+    			break;    			
+    		}
+    	}
+		return Cidades.get(i);
+    }
+
+	private static String[] separaTexto(String txt) {
+    	String[] tx= {"",""};
+    	for (int i = 0; i< txt.length(); i++) {
+    		if(txt.charAt(i) == '(') {
+    			tx[0] = txt.substring(0,i-1);
+    			tx[1] = txt.substring(i+1);
+    			tx[1] = tx[1].replace(")", "");
+    			break;
+    		}
+    	}
+    	return tx;
+    }
 
     // Método para recomendar uma rota para um passageiro (Requisito d)
     public List<Cidade> recomendarRotaPassageiro(Cidade origem) {
@@ -73,7 +99,7 @@ public class RodoviariaInternacional {
         rota.add(origem);
         visitadas.add(origem);
 
-        while (visitadas.size() < cidades.size()) {
+        while (visitadas.size() < Cidades.size()) {
             Cidade cidadeAtual = rota.get(rota.size() - 1);
             Cidade cidadeMaisProxima = null;
             int menorDistancia = Integer.MAX_VALUE;
@@ -99,37 +125,49 @@ public class RodoviariaInternacional {
 
     public static void main(String[] args) {
         RodoviariaInternacional rodoviaria = new RodoviariaInternacional();
-
-        Cidade cidadeDoCabo = new Cidade("Cidade do Cabo", 0);
-        Cidade joanesburgo = new Cidade("Joanesburgo", 1);
-        Cidade nairobi = new Cidade("Nairobi", 2);
-        Cidade paris = new Cidade("Paris", 3);
-
-        Estrada estrada1 = new Estrada(cidadeDoCabo, joanesburgo, 1270);
-        Estrada estrada2 = new Estrada(cidadeDoCabo, nairobi, 3900);
-        Estrada estrada3 = new Estrada(joanesburgo, nairobi, 4700);
-        Estrada estrada4 = new Estrada(paris, cidadeDoCabo, 9000);
-
-        cidadeDoCabo.adicionarEstrada(estrada1);
-        cidadeDoCabo.adicionarEstrada(estrada2);
-        joanesburgo.adicionarEstrada(estrada1);
-        joanesburgo.adicionarEstrada(estrada3);
-        nairobi.adicionarEstrada(estrada2);
-        nairobi.adicionarEstrada(estrada3);
-        paris.adicionarEstrada(estrada4);
-
-        rodoviaria.adicionarCidade(cidadeDoCabo);
-        rodoviaria.adicionarCidade(joanesburgo);
-        rodoviaria.adicionarCidade(nairobi);
-        rodoviaria.adicionarCidade(paris);
-
-        rodoviaria.adicionarEstrada(estrada1);
-        rodoviaria.adicionarEstrada(estrada2);
-        rodoviaria.adicionarEstrada(estrada3);
-        rodoviaria.adicionarEstrada(estrada4);
+    	int cdDistancia;
+    	Scanner sc = new Scanner(System.in);
+    	String linhaAtual,cidadeNome;
+    	String[] palavras, inicio, cd;
+    	Cidade atual, destino, c1;
+    	List <String> conexoes = new ArrayList<>();
+    	    	
+    	System.out.println("Repasse o caminho absoluto do arquivo: ");
+    	String filename = sc.nextLine();
+        try (Scanner fileScanner = new Scanner(new File(filename))) {
+            while (fileScanner.hasNextLine()) {
+            	linhaAtual = fileScanner.nextLine();
+            	palavras = linhaAtual.split(", ");
+            	inicio = palavras[0].split(": ");
+            	cidadeNome = inicio[0];
+            	conexoes.add(inicio[1]);
+            	c1 = new Cidade(cidadeNome,Cidades.size() + 1);
+            	Cidades.add(c1);
+            	rodoviaria.adicionarCidade(c1);
+            	for(int i = 1; i < palavras.length; i ++) {
+            		conexoes.add(palavras[i]);
+            	}
+            	conexoes.add("e");
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + e.getMessage());
+        }
+        int id = 0;
+        Estrada es;
+        for (String c : conexoes) {
+        	  atual = Cidades.get(id);
+        	  if ("e".equals(c)) {
+        		  id ++;
+        	  }else {
+        		cd = separaTexto(c);	
+        		destino = encontraDestino(cd[0]);
+        		cdDistancia = Integer.parseInt(cd[1]);
+        		es = new Estrada(atual, destino, cdDistancia);
+        		atual.adicionarEstrada(es);
+        		rodoviaria.adicionarEstrada(es);
+        	  }
+        }
         
-        Scanner scanner = new Scanner(System.in);
-
         while (true) {
             System.out.println("\nOpções:");
             System.out.println("1. Recomendar Visitação em Todas as Cidades");
@@ -139,7 +177,7 @@ public class RodoviariaInternacional {
             System.out.println("5. Sair");
             System.out.println("Escolha uma opção: ");
 
-            int opcao = scanner.nextInt();
+            int opcao = sc.nextInt();
 
             switch (opcao) {
                 case 1:
@@ -148,25 +186,25 @@ public class RodoviariaInternacional {
                     break;
                 case 2:
                     System.out.print("Digite o ID da cidade de origem: ");
-                    int idOrigem = scanner.nextInt();
+                    int idOrigem = sc.nextInt();
                     System.out.print("Digite o ID da cidade de destino: ");
-                    int idDestino = scanner.nextInt();
+                    int idDestino = sc.nextInt();
 
                     Cidade origem = rodoviaria.getCidades().get(idOrigem);
-                    Cidade destino = rodoviaria.getCidades().get(idDestino);
+                    destino = rodoviaria.getCidades().get(idDestino);
 
                     if (rodoviaria.existeEstradaEntreCidades(origem, destino)) {
-                        System.out.println("Existe uma estrada entre as cidades.");
+                        System.out.println("Existe uma estrada entre as Cidades.");
                     } else {
-                        System.out.println("Não existe uma estrada entre as cidades.");
+                        System.out.println("Não existe uma estrada entre as Cidades.");
                     }
                     break;
                 case 3:
-                    rodoviaria.cidadesInacessiveis();
+                    rodoviaria.CidadesInacessiveis();
                     break;
                 case 4:
                         System.out.print("Digite o ID da cidade de origem para o passageiro: ");
-                    int idOrigemPassageiro = scanner.nextInt();
+                    int idOrigemPassageiro = sc.nextInt();
 
                     Cidade origemPassageiro = rodoviaria.getCidades().get(idOrigemPassageiro);
                     List<Cidade> rotaPassageiro = rodoviaria.recomendarRotaPassageiro(origemPassageiro);
@@ -178,7 +216,7 @@ public class RodoviariaInternacional {
                     break;
                 case 5:
                     System.out.println("Saindo da aplicação.");
-                    scanner.close();
+                    sc.close();
                     System.exit(0);
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
