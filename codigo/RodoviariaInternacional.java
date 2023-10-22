@@ -32,7 +32,9 @@ public class RodoviariaInternacional {
     }
     public void mostrarCidades(){
         System.out.println("Lista de Cidades:");
-        System.out.println(Cidades);
+        for (Cidade c : Cidades) {
+        	System.out.println("["+c.getId()+"]"+c.getNome());
+        }
     }
 
     // Método para obter uma recomendação de visitação em todas as Cidades (Requisito a)
@@ -71,7 +73,6 @@ public class RodoviariaInternacional {
     private static Cidade encontraDestino(String NomeDestino) {
     	int i;
     	for (i = 0; i < Cidades.size(); i ++) {
-    		String a = Cidades.get(i).getNome();
     		if (NomeDestino.equals(Cidades.get(i).getNome())) {
     			break;    			
     		}
@@ -119,7 +120,7 @@ public class RodoviariaInternacional {
                 break;
             }
         }
-
+        rota.add(origem);
         return rota;
     }
 
@@ -143,7 +144,6 @@ public class RodoviariaInternacional {
             	conexoes.add(inicio[1]);
             	c1 = new Cidade(cidadeNome,Cidades.size() + 1);
             	Cidades.add(c1);
-            	rodoviaria.adicionarCidade(c1);
             	for(int i = 1; i < palavras.length; i ++) {
             		conexoes.add(palavras[i]);
             	}
@@ -169,56 +169,68 @@ public class RodoviariaInternacional {
         }
         
         while (true) {
-            System.out.println("\nOpções:");
-            System.out.println("1. Recomendar Visitação em Todas as Cidades");
-            System.out.println("2. Verificar Existência de Estrada entre Cidades");
-            System.out.println("3. Identificar Cidades Inacessíveis");
-            System.out.println("4. Recomendar Rota para Passageiro");
-            System.out.println("5. Sair");
-            System.out.println("Escolha uma opção: ");
+            System.out.print("------------------------------------------------------ \n"
+            		+ "Opções: \n"
+            		+ "1. Recomendar Visitação em Todas as Cidades \n"
+            		+ "2. Verificar Existência de Estrada entre Cidades \n"
+            		+ "3. Identificar Cidades Inacessíveis \n"
+            		+ "4. Recomendar Rota para Passageiro \n"
+            		+ "5. Sair \n"
+            		+ "Escolha uma opção: \n"
+            		+ "> ");
 
             int opcao = sc.nextInt();
 
             switch (opcao) {
                 case 1:
+                	System.out.print("------------------------------------------------------ \n");
                     rodoviaria.mostrarCidades();
-                    rodoviaria.recomendarVisitaTodasCidades();
+                   // rodoviaria.recomendarVisitaTodasCidades();
                     break;
                 case 2:
-                    System.out.print("Digite o ID da cidade de origem: ");
-                    int idOrigem = sc.nextInt();
-                    System.out.print("Digite o ID da cidade de destino: ");
-                    int idDestino = sc.nextInt();
-
+                	System.out.print("------------------------------------------------------ \n");
+                    int idDestino=0,idOrigem =0;
+                    do {
+                    	System.out.print("Digite o ID da cidade de origem: ");
+                    	idOrigem = sc.nextInt();
+                    	idOrigem--;
+                    	System.out.print("Digite o ID da cidade de destino: ");
+                    	idDestino = sc.nextInt();
+                       	idDestino--;
+                    } while (idOrigem == idDestino);
+                    
                     Cidade origem = rodoviaria.getCidades().get(idOrigem);
                     destino = rodoviaria.getCidades().get(idDestino);
-
+                    System.out.print("\n");
                     if (rodoviaria.existeEstradaEntreCidades(origem, destino)) {
-                        System.out.println("Existe uma estrada entre as Cidades.");
+                        System.out.println(">> Existe uma estrada entre as Cidades.");
                     } else {
-                        System.out.println("Não existe uma estrada entre as Cidades.");
+                        System.out.println(">> Não existe uma estrada entre as Cidades.");
                     }
                     break;
                 case 3:
+                	System.out.print("------------------------------------------------------ \n");
                     rodoviaria.CidadesInacessiveis();
                     break;
                 case 4:
-                        System.out.print("Digite o ID da cidade de origem para o passageiro: ");
-                    int idOrigemPassageiro = sc.nextInt();
-
+                	System.out.print("------------------------------------------------------ \n");
+                    //System.out.print("Digite o ID da cidade de origem para o passageiro: ");
+                    int idOrigemPassageiro = 0; // Começa da 1ª cidade
                     Cidade origemPassageiro = rodoviaria.getCidades().get(idOrigemPassageiro);
                     List<Cidade> rotaPassageiro = rodoviaria.recomendarRotaPassageiro(origemPassageiro);
 
-                    System.out.println("Recomendação de rota para o passageiro:");
+                    System.out.println("-- Recomendação de rota para o passageiro:");
                     for (Cidade cidade : rotaPassageiro) {
                         System.out.println(cidade.getNome());
                     }
                     break;
                 case 5:
+                	System.out.print("------------------------------------------------------ \n");
                     System.out.println("Saindo da aplicação.");
                     sc.close();
                     System.exit(0);
                 default:
+                	System.out.print("------------------------------------------------------ \n");
                     System.out.println("Opção inválida. Tente novamente.");
             }
         }
